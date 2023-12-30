@@ -1,0 +1,17 @@
+package net.project.employeesystembackend.service;
+
+import net.project.employeesystembackend.dto.EmployeeDto;
+
+import java.util.List;
+
+public interface EmployeeService {
+    EmployeeDto createEmployeeDto(EmployeeDto employeeDto);
+
+    EmployeeDto getEmployeeById(Long employeeId);
+
+    List<EmployeeDto> getAllEmployees();
+
+    EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto);
+
+    void deleteEmployee(Long employeeId);
+}

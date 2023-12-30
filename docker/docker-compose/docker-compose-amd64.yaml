@@ -1,0 +1,59 @@
+version: "3.5"
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
+
+services:
+
+  mysql: 
+    image: mysql:8.0.19
+    # No MySQL for arm64
+    platform: linux/amd64
+    container_name: app-mysql
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/mysql
+    networks:
+      - app-network
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+
+  app-backend:
+    image: university-project-app-backend-amd64:latest
+    container_name: app-backend
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+    networks:
+      - app-network
+  
+  app-frontend:
+    image: university-project-app-frontend-amd64:latest
+    container_name: app-frontend
+    depends_on: 
+      - app-backend
+    ports:
+      - 3000:3000
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+    networks:
+      - app-network
+
+volumes:
+  mysql:
+    driver: local
