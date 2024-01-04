@@ -1,9 +1,9 @@
 FROM openjdk:17
 
-COPY management-system.jar /app/management-system.jar 
+COPY ms-backend.jar /app/ms-backend.jar 
 
 EXPOSE 8080
 
 WORKDIR /app
 
-ENTRYPOINT [ "java", "-jar", "/app/management-system.jar" ]
+ENTRYPOINT [ "java", "-jar", "/app/ms-backend.jar" ]

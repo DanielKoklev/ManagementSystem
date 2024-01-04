@@ -1,15 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import { deleteEmployee, listEmployees } from '../services/EmployeeService'
+import { deleteEmployee, listEmployees, sortEmployeesById } from '../services/EmployeeService'
 import { useNavigate } from 'react-router-dom'
 
 const ListEmployeeComponent = () => {
 
     const [employees, setEmployees] = useState([])
+    const [sortOrder, setSortOrder] = useState('asc')
     const navigator = useNavigate()
 
     useEffect(() => {
-        getAllEmployees()
-    }, [])
+        fetchEmployees();
+    }, [sortOrder]);
+
+    function fetchEmployees() {
+        if (sortOrder) {
+            sortById(sortOrder);
+          } else {
+            getAllEmployees();
+          }
+        };
 
     function getAllEmployees() {
         listEmployees().then((response) => {
@@ -17,6 +26,18 @@ const ListEmployeeComponent = () => {
         }).catch(error => {
             console.error(error);
         })
+    }
+
+    function sortById(order) {
+        sortEmployeesById(order).then((response) => {
+            setEmployees(response.data);
+        }).catch(error => {
+            console.error(error);
+        })
+    }
+
+    function handleSortChange(e) {
+        setSortOrder(e.target.value)
     }
 
     function addNewEmployee() {
@@ -39,9 +60,15 @@ const ListEmployeeComponent = () => {
   
     return (
     <div className='container'>
-
         <h2 className='text-center'>All Employees</h2>
         <button className='btn btn-primary mb-2' onClick={addNewEmployee}> Add Employee </button>
+        <div>
+            <label>Sort by ID:</label>
+                <select value={sortOrder} onChange={handleSortChange}>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+            </select>
+        </div>
         <table className='table table-striped table-bordered'>
             <thead>
                 <tr>

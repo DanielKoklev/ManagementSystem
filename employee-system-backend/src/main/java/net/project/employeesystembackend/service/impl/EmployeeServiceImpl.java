@@ -8,6 +8,7 @@ import net.project.employeesystembackend.mapper.EmployeeMapper;
 import net.project.employeesystembackend.repository.EmployeeRepository;
 import net.project.employeesystembackend.service.EmployeeService;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map(EmployeeMapper::mapToEmployeeDto)
                 .collect(Collectors.toList());
     }
+
+    // public List<EmployeeDto> getAllEmployeesSortedById(Sort.Direction direction) {
+    //     Sort sort = Sort.by(Sort.Order.by("id").with(direction));
+    //     List<Employee> employees = employeeRepository.findAll(sort);
+    //     return employees.stream().map(EmployeeMapper::mapToEmployeeDto)
+    //             .collect(Collectors.toList());
+    // }
 
     public EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee) {
         Employee employee = employeeRepository.findById(employeeId)
