@@ -1,24 +1,17 @@
 import React, {useEffect, useState} from 'react'
-import { deleteEmployee, listEmployees, sortEmployeesById } from '../services/EmployeeService'
+import { deleteEmployee, listEmployees } from '../services/EmployeeService'
 import { useNavigate } from 'react-router-dom'
 
 const ListEmployeeComponent = () => {
 
     const [employees, setEmployees] = useState([])
-    const [sortOrder, setSortOrder] = useState('asc')
+    const [search, setSearch] = useState('')
+
     const navigator = useNavigate()
 
     useEffect(() => {
-        fetchEmployees();
-    }, [sortOrder]);
-
-    function fetchEmployees() {
-        if (sortOrder) {
-            sortById(sortOrder);
-          } else {
-            getAllEmployees();
-          }
-        };
+        getAllEmployees();
+    }, []);
 
     function getAllEmployees() {
         listEmployees().then((response) => {
@@ -26,18 +19,6 @@ const ListEmployeeComponent = () => {
         }).catch(error => {
             console.error(error);
         })
-    }
-
-    function sortById(order) {
-        sortEmployeesById(order).then((response) => {
-            setEmployees(response.data);
-        }).catch(error => {
-            console.error(error);
-        })
-    }
-
-    function handleSortChange(e) {
-        setSortOrder(e.target.value)
     }
 
     function addNewEmployee() {
@@ -62,13 +43,9 @@ const ListEmployeeComponent = () => {
     <div className='container'>
         <h2 className='text-center'>All Employees</h2>
         <button className='btn btn-primary mb-2' onClick={addNewEmployee}> Add Employee </button>
-        <div>
-            <label>Sort by ID:</label>
-                <select value={sortOrder} onChange={handleSortChange}>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-            </select>
-        </div>
+        <input class="form-control mb-4" id="tableSearch" type="text" placeholder="Search.." onChange={(e) => setSearch(e.target.value)}>
+
+        </input>
         <table className='table table-striped table-bordered'>
             <thead>
                 <tr>
@@ -81,7 +58,9 @@ const ListEmployeeComponent = () => {
             </thead>
             <tbody>
                 {
-                    employees.map(employee => 
+                    employees.filter((item) => {
+                        return search.toLowerCase() === '' ? item : item.firstName.toLowerCase().includes(search)
+                    }).map(employee => 
                         <tr key={employee.id}>
                             <td>{employee.id}</td>
                             <td>{employee.firstName}</td>

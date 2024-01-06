@@ -12,8 +12,6 @@ public interface EmployeeService {
 
     List<EmployeeDto> getAllEmployees();
 
-    // List<EmployeeDto> getAllEmployeesSortedById(Sort.Direction direction);
-
     EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto);
 
     void deleteEmployee(Long employeeId);

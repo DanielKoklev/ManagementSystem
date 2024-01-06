@@ -17,3 +17,8 @@ function build_all(){
     build_amd64
     build_arm64
 }
+
+echo "Available functions:"
+echo "build_amd64\tBuild for AMD64 architecture"
+echo "build_arm64\tBuild for ARM64 architecture"
+echo "build_all\tBuild for both architectures"

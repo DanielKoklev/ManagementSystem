@@ -42,13 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    // public List<EmployeeDto> getAllEmployeesSortedById(Sort.Direction direction) {
-    //     Sort sort = Sort.by(Sort.Order.by("id").with(direction));
-    //     List<Employee> employees = employeeRepository.findAll(sort);
-    //     return employees.stream().map(EmployeeMapper::mapToEmployeeDto)
-    //             .collect(Collectors.toList());
-    // }
-
     public EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee with this id is not found!"));
